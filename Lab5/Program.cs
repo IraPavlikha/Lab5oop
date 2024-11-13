@@ -2,22 +2,23 @@ using System;
 
 public class Calculator
 {
-    public double Add(double a, double b)
+    // Приватні методи для виконання арифметичних операцій
+    private double Add(double a, double b)
     {
         return a + b;
     }
 
-    public double Subtract(double a, double b)
+    private double Subtract(double a, double b)
     {
         return a - b;
     }
 
-    public double Multiply(double a, double b)
+    private double Multiply(double a, double b)
     {
         return a * b;
     }
 
-    public double Divide(double a, double b)
+    private double Divide(double a, double b)
     {
         if (b == 0)
         {
@@ -27,7 +28,7 @@ public class Calculator
         return a / b;
     }
 
-    public double Modulus(double a, double b)
+    private double Modulus(double a, double b)
     {
         if (b == 0)
         {
@@ -37,14 +38,38 @@ public class Calculator
         return a % b;
     }
 
-    public double Power(double a, double b)
+    private double Power(double a, double b)
     {
         return Math.Pow(a, b);
+    }
+
+    // Публічний метод для виконання операцій за вибором
+    public double ExecuteOperation(int choice, double a, double b)
+    {
+        switch (choice)
+        {
+            case 1:
+                return Add(a, b);
+            case 2:
+                return Subtract(a, b);
+            case 3:
+                return Multiply(a, b);
+            case 4:
+                return Divide(a, b);
+            case 5:
+                return Modulus(a, b);
+            case 6:
+                return Power(a, b);
+            default:
+                Console.WriteLine("Невідомий вибір операції.");
+                return 0;
+        }
     }
 }
 
 public class UserInterface
 {
+    // Виведення вибору операції
     public static int GetChoice()
     {
         Console.WriteLine("Виберіть операцію:");
@@ -65,12 +90,14 @@ public class UserInterface
         return choice;
     }
 
+    // Введення операнда
     public static double GetOperand(string operandName)
     {
         Console.Write($"Введіть {operandName} операнд: ");
         return Convert.ToDouble(Console.ReadLine());
     }
 
+    // Виведення результату
     public static void ShowResult(double result)
     {
         Console.WriteLine("Результат: " + result);
@@ -82,31 +109,13 @@ class Program
     static void Main(string[] args)
     {
         Calculator myCalculator = new Calculator();
-        int choice = UserInterface.GetChoice();
 
+        int choice = UserInterface.GetChoice();
         double operand1 = UserInterface.GetOperand("перший");
         double operand2 = UserInterface.GetOperand("другий");
 
-        switch (choice)
-        {
-            case 1:
-                UserInterface.ShowResult(myCalculator.Add(operand1, operand2));
-                break;
-            case 2:
-                UserInterface.ShowResult(myCalculator.Subtract(operand1, operand2));
-                break;
-            case 3:
-                UserInterface.ShowResult(myCalculator.Multiply(operand1, operand2));
-                break;
-            case 4:
-                UserInterface.ShowResult(myCalculator.Divide(operand1, operand2));
-                break;
-            case 5:
-                UserInterface.ShowResult(myCalculator.Modulus(operand1, operand2));
-                break;
-            case 6:
-                UserInterface.ShowResult(myCalculator.Power(operand1, operand2));
-                break;
-        }
+        // Виконання операції через публічний метод ExecuteOperation
+        double result = myCalculator.ExecuteOperation(choice, operand1, operand2);
+        UserInterface.ShowResult(result);
     }
 }
